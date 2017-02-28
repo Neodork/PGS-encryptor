@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Credentials
+KEY_OWNER_NAME="Neodork.dev@gmail.com" # Change this to your GPG key owner name or email
+
+# Binaries
+GPG_BIN=`which gpg`
+SSH_AGENT_BIN=`which ssh-agent`
+SSH_ADD_BIN=`which ssh-add`
+TAR_BIN=`which tar`
+
+# If we couldn't find GPG then try GPG2
+if [ -z "${GPG_BIN}" ]; then
+    GPG_BIN=`which gpg2`
+fi
+
+# Folders / Files / Key names and locations
+SSH_KEY_DIR="ssh"
+SSH_FULL_KEY_DIR="sshfull"
+GPG_HOME_DIR="$DIR/masterkey"
+GPG_AGENT_CONFIG_FILE="$DIR/masterkey/gpg-agent.conf"
+if [ -d "$SSH_KEY_DIR" ]; then
+    SSH_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
+fi
+
+# Tar names
+SSH_KEY_TAR=${SSH_KEY_DIR}.tar.gz
+SSH_FULL_KEY_TAR=${SSH_FULL_KEY_DIR}.tar.gz
+
+# Encrypted files
+ENCRYPTED_KEYS_FILE=${SSH_KEY_TAR}.gpg
+ENCRYPTED_FULL_KEYS_FILE=${SSH_FULL_KEY_TAR}.gpg

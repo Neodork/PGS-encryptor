@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+. "$DIR/script/functions"
+
+# Don't start if the system does not satisfy the requires binaries.
+check_binaries
+
+function check_dependencies {
+
+    [ -z "${SSH_KEY_DIR}" ] && echo "No ssh private key folder found! Exiting..." && exit 1
+    [ -z "${SSH_FULL_KEY_DIR}" ] && echo "No sshfull folder found! Exiting..." && exit 1
+    [ -z "${GPG_HOME_DIR}" ] && echo "No GPG home folder found! Exiting..." && exit 1
+    [ -z "${SSH_KEY_TAR}" ] && echo "No TAR name found! Exiting..." && exit 1
+    [ -z "${SSH_FULL_KEY_TAR}" ] && echo "No TAR name found! Exiting..." && exit 1
+
+    if [ ! -d "$SSH_KEY_DIR" ]; then
+      echo "No ssh private key folder found! Exiting..." && exit 1
+    fi
+    if [ ! -d "$SSH_FULL_KEY_DIR" ]; then
+      echo "No sshfull folder found! Exiting..." && exit 1
+    fi
+    if [ ! -d "$GPG_HOME_DIR" ]; then
+      echo "No GPG home folder found! Exiting..." && exit 1
+    fi
+}
+
+if is_encrypted; then
+    echo "Already encrypted!";
+else
+    check_dependencies
+    encrypt_private_keys
+    encrypt_all_keys
+fi

@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+function is_encrypted {
+    if [ -f ${ENCRYPTED_KEYS_FILE} ] || [ -f ${ENCRYPTED_FULL_KEYS_FILE} ]; then
+        return 0;
+    fi
+    return 1;
+}
+
+function check_binaries {
+
+    [ -z "${SSH_AGENT_BIN}" ] && echo "No ssh-agent bin found! Exiting..." && exit 1
+    [ -z "${SSH_ADD_BIN}" ] && echo "No ssh-add bin found! Exiting..." && exit 1
+    [ -z "${GPG_BIN}" ] && echo "No GPG bin found! Exiting..." && exit 1
+    [ -z "${TAR_BIN}" ] && echo "No TAR bin found! Exiting..." && exit 1
+}
+
+function print_separator {
+      echo "--------------------------------------------------------------------------------"
+}
+
+function encrypt_private_keys {
+
+    # Tar directories
+    ${TAR_BIN} czf ${SSH_KEY_TAR} ${SSH_KEY_DIR}
+
+    # Set GPG home to our USB GPG home
+    export GNUPGHOME=${GPG_HOME_DIR}
+
+    ${GPG_BIN} --encrypt --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${SSH_KEY_TAR} && {
+      echo "GPG: Encryption of $SSH_KEY_TAR complete! Removing unencrypted resources.."
+      rm -r ${SSH_KEY_DIR}
+      rm ${SSH_KEY_TAR}
+      } || {
+      echo "ERROR! $SSH_KEY_TAR failed to encrypt"
+    }
+}
+
+function encrypt_all_keys {
+
+    # Tar directories
+    ${TAR_BIN}  czf ${SSH_FULL_KEY_TAR} ${SSH_FULL_KEY_DIR}
+
+    # Set GPG home to our USB GPG home
+    export GNUPGHOME=${GPG_HOME_DIR}
+
+    ${GPG_BIN} --encrypt --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${SSH_FULL_KEY_TAR} && {
+      echo "GPG: Encryption of $SSH_FULL_KEY_TAR complete! Removing unencrypted resources.."
+      rm -r ${SSH_FULL_KEY_DIR}
+      rm ${SSH_FULL_KEY_TAR}
+      } || {
+      echo "ERROR! $SSH_FULL_KEY_TAR failed to encrypt"
+    }
+}
+
+function decrypt_private_keys {
+
+    # Set GPG home to our USB GPG home
+    export GNUPGHOME=${GPG_HOME_DIR}
+
+    # Decrypt encrypted files
+    print_separator
+    ${GPG_BIN} --decrypt --output ${SSH_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_KEYS_FILE} && {
+      echo "gpg: Decryption of ${ENCRYPTED_KEYS_FILE} complete! Removing encrypted resources.."
+      rm ${ENCRYPTED_KEYS_FILE}
+      print_separator
+      } || {
+      echo "ERROR! $SSH_KEY_TAR failed to decrypt"
+      print_separator
+      exit 1;
+    }
+}
+
+function decrypt_all_keys {
+    # Set GPG home to our USB GPG home
+    export GNUPGHOME=${GPG_HOME_DIR}
+
+    ${GPG_BIN} --decrypt --output ${SSH_FULL_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_FULL_KEYS_FILE} && {
+      echo "gpg: Decryption of ${ENCRYPTED_FULL_KEYS_FILE} complete! Removing encrypted resources.."
+      print_separator
+      rm ${ENCRYPTED_FULL_KEYS_FILE}
+      } || {
+      echo "ERROR! $SSH_FULL_KEY_TAR failed to decrypt"
+      print_separator
+      exit 1;
+    }
+}
+
+function flush_passphrase_cache {
+    # Forget cached passphrases
+    printf "Dumping passphrase cache..."  && printf RELOADAGENT | gpg-connect-agent
+    print_separator
+}
+
+function untar {
+    # Untar files
+    for file in *.tar.gz; do tar xzvf "${file}" && echo "\nTar: Completed unpacking archive, removing ${file}" && print_separator && rm "${file}"; done
+}

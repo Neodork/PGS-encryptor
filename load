@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+. "$DIR/script/functions"
+
+HOURS=$1
+
+if [ -z $HOURS ]; then
+  HOURS=1
+fi
+
+function check_dependencies {
+
+    [ -z "${SSH_KEYS}" ] && echo "No ssh keys found, exiting." && exit 1
+    [ -z "${SSH_AGENT_BIN}" ] && echo "No ssh-agent command found, exiting." && exit 1
+    [ -z "${SSH_ADD_BIN}" ] && echo "No ssh-add command found, exiting." && exit 1
+}
+
+if is_encrypted; then
+echo "hi"
+    check_dependencies
+    decrypt_private_keys
+    flush_passphrase_cache
+    untar
+else
+    echo "ERROR! Cannot load unencrypted keys! Run: \"sh encrypt\" first";
+fi
+
+

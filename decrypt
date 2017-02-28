@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+. "$DIR/script/functions"
+
+# Don't start if the system does not satisfy the requires binaries.
+check_binaries
+
+function check_dependencies {
+
+    [ -z "${ENCRYPTED_KEYS_FILE}" ] && echo "No encrypted file name found! Exiting..." && exit 1
+    [ -z "${ENCRYPTED_FULL_KEYS_FILE}" ] && echo "No encrypted file name found! Exiting..." && exit 1
+
+    if [ ! -f "$ENCRYPTED_KEYS_FILE" ] && [ ! -f "$ENCRYPTED_FULL_KEYS_FILE" ]; then
+      echo "No encrypted file found! Exiting..." && exit 1
+    fi
+}
+
+if is_encrypted; then
+    check_dependencies
+    decrypt_private_keys
+    decrypt_all_keys
+    flush_passphrase_cache
+    untar
+else
+    echo "Nothing to decrypt!";
+fi

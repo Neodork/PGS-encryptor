@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+
+
+function check_requirements {
+
+    echo "Checking folder requirements...\r\n"
+
+    if [ ! -d "$SSH_KEY_DIR" ]; then
+        echo "Could not find: $SSH_KEY_DIR directory, creating..."
+        mkdir ${SSH_KEY_DIR}
+        chmod -R 700 ${SSH_KEY_DIR}
+    fi
+
+    if [ ! -d "$SSH_FULL_KEY_DIR" ]; then
+        echo "Could not find: $SSH_FULL_KEY_DIR directory, creating..."
+        mkdir ${SSH_FULL_KEY_DIR}
+        chmod -R 700 ${SSH_FULL_KEY_DIR}
+    fi
+
+    if [ ! -d "$GPG_HOME_DIR" ]; then
+        echo "Could not find: $GPG_HOME_DIR directory, creating..."
+        mkdir ${GPG_HOME_DIR}
+        chmod -R 700 ${GPG_HOME_DIR}
+    fi
+}
+
+read -p "Are you sure? Running init on a drive that was already initialized can cause unexpected results! (y/n)" -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    check_requirements
+fi
