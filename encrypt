@@ -31,6 +31,7 @@ if is_encrypted; then
     echo "Already encrypted!";
 else
     check_dependencies
+    set_gpg_home
     encrypt_private_keys
     encrypt_all_keys
 fi

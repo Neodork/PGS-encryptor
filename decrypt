@@ -20,6 +20,7 @@ function check_dependencies {
 
 if is_encrypted; then
     check_dependencies
+    set_gpg_home
     decrypt_private_keys
     decrypt_all_keys
     flush_passphrase_cache
