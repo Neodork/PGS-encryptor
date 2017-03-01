@@ -10,7 +10,7 @@ I have only tested this with a USB / SD card never with high volume devices. Whe
 - Run `sh init` to generate the correct folders, permissions and a gpg masterkey
 - Fill the `ssh` folder with private keys (and optionally `full-ssh` with private, public and root_ca keys)
 - Run `sh encrypt` to encrypt the ssh and sshfull directory
-- (WIP - THIS DOESNT WORK YET!) Run `sh load` or `shell load 2` to load your keys for N amount of hours.
+- (WIP - THIS DOESNT WORK YET!) Run `sh load` or `sh load 2` to load your keys for N amount of hours.
 - decrypt everything using `sh decrypt` this will of course ask for your passphrase.
 - (WIP - THIS DOESNT EXIST YET!) Run `sh copy <yourvolume>` to copy your PGS setup to another drive.
 
