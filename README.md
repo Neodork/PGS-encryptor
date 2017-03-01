@@ -2,13 +2,12 @@
 A small personal collection of shell scripts used for encrypting/decrypting and loading SSH keys into a workstation. Created with [sources](https://gist.github.com/stupakov/11227904) [all](https://github.com/DamnedFacts/ssh-fob) [over](http://tammersaleh.com/posts/building-an-encrypted-usb-drive-for-your-ssh-keys-in-os-x/) the internet.
 
 ## Usage
-I have only tested this with a USB / SD card never with high volume devices. When refering to 'Your drive', 'A drive', 'The drive' I am refering to a USB / SD card or [a SD card in a reader](https://www.kingston.com/us/flash/readers/fcr-mrg2).
+I have only tested this with a USB / SD card never with high volume devices. When referring to 'Your drive', 'A drive', 'The drive' I am referring to a USB / SD card or [a SD card in a reader](https://www.kingston.com/us/flash/readers/fcr-mrg2).
 
 - Make sure your USB / SD card is using the UDF format (See formatting!)
 - Clone this repository to your USB / SD card.
 - Go to or open a command line in your USB / SD card root directory.
-- Run `sh init` to generate the correct folders/permissions
-- ??? (WIP) in this step you're supposed to generate a GPG key for example with: `gpg2 --homedir /Volumes/yourvolume/masterkey --full-gen-key`. This should however be done with the init script. (WIP)
+- Run `sh init` to generate the correct folders, permissions and a masterkey
 - Fill the `ssh` folder with private keys (and optionally `full-ssh` with private, public and root_ca keys)
 - Run `sh encrypt`
 - (WIP - THIS DOESNT WORK YET!) Run `sh load` or `shell load 2` to load your keys for N amount of hours.
@@ -18,6 +17,7 @@ I have only tested this with a USB / SD card never with high volume devices. Whe
 Optional:
 - Run `sh status` to check the status of the drive
 
+Note: Protect your private keys with a passphrase otherwise they're susceptible to be compromised when loading into a ssh-agent.
 
 ## Formatting
 I formatted my drive on MacOS (El Capitan) using [this blog post](http://www.sfcgeorge.co.uk/posts/2013/12/29/howto-format-udf-filesystem-osx-advantages). The format required for these scripts to run is `UDF`. For more information on what the format does and how it works please read the blog post. I'll quickly go over the steps again here in case the link is lost:
