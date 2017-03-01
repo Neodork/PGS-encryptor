@@ -13,10 +13,11 @@ function check_binaries {
     [ -z "${SSH_ADD_BIN}" ] && echo "No ssh-add bin found! Exiting..." && exit 1
     [ -z "${GPG_BIN}" ] && echo "No GPG bin found! Exiting..." && exit 1
     [ -z "${TAR_BIN}" ] && echo "No TAR bin found! Exiting..." && exit 1
+    [ -z "${TOUCH_BIN}" ] && echo "No Touch bin found! Exiting..." && exit 13
 }
 
 function print_separator {
-      echo "--------------------------------------------------------------------------------"
+      echo "-------------------------------------------------"
 }
 
 function encrypt_private_keys {
@@ -32,7 +33,9 @@ function encrypt_private_keys {
       rm -r ${SSH_KEY_DIR}
       rm ${SSH_KEY_TAR}
       } || {
+      remove_tars
       echo "ERROR! $SSH_KEY_TAR failed to encrypt"
+      exit 1;
     }
 }
 
@@ -49,17 +52,14 @@ function encrypt_all_keys {
       rm -r ${SSH_FULL_KEY_DIR}
       rm ${SSH_FULL_KEY_TAR}
       } || {
+      remove_tars
       echo "ERROR! $SSH_FULL_KEY_TAR failed to encrypt"
+      exit 1;
     }
 }
 
 function decrypt_private_keys {
-
-    # Set GPG home to our USB GPG home
-    export GNUPGHOME=${GPG_HOME_DIR}
-
-    # Decrypt encrypted files
-    print_separator
+    if [ -f ${ENCRYPTED_KEYS_FILE} ]; then
     ${GPG_BIN} --decrypt --output ${SSH_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_KEYS_FILE} && {
       echo "gpg: Decryption of ${ENCRYPTED_KEYS_FILE} complete! Removing encrypted resources.."
       rm ${ENCRYPTED_KEYS_FILE}
@@ -69,12 +69,13 @@ function decrypt_private_keys {
       print_separator
       exit 1;
     }
+    else
+        echo "Skipping ${ENCRYPTED_KEYS_FILE}, file not found..."
+    fi
 }
 
 function decrypt_all_keys {
-    # Set GPG home to our USB GPG home
-    export GNUPGHOME=${GPG_HOME_DIR}
-
+    if [ -f ${ENCRYPTED_FULL_KEYS_FILE} ]; then
     ${GPG_BIN} --decrypt --output ${SSH_FULL_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_FULL_KEYS_FILE} && {
       echo "gpg: Decryption of ${ENCRYPTED_FULL_KEYS_FILE} complete! Removing encrypted resources.."
       print_separator
@@ -83,7 +84,16 @@ function decrypt_all_keys {
       echo "ERROR! $SSH_FULL_KEY_TAR failed to decrypt"
       print_separator
       exit 1;
-    }
+     }
+    else
+        echo "Skipping ${ENCRYPTED_FULL_KEYS_FILE}, file not found..."
+        print_separator
+    fi
+}
+
+function set_gpg_home {
+    # Set GPG home to our USB GPG home
+    export GNUPGHOME=${GPG_HOME_DIR}
 }
 
 function flush_passphrase_cache {
@@ -95,4 +105,9 @@ function flush_passphrase_cache {
 function untar {
     # Untar files
     for file in *.tar.gz; do tar xzvf "${file}" && echo "\nTar: Completed unpacking archive, removing ${file}" && print_separator && rm "${file}"; done
+}
+
+function remove_tars {
+    # Untar files
+    for file in *.tar.gz; do rm "${file}"; done
 }

@@ -3,9 +3,14 @@
 DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/script/globals"
+. "$DIR/script/functions"
 
+# Don't start if the system does not satisfy the requires binaries.
+check_binaries
 
 function check_requirements {
+
+    print_separator
 
     echo "Checking folder requirements...\r\n"
 
@@ -26,11 +31,30 @@ function check_requirements {
         mkdir ${GPG_HOME_DIR}
         chmod -R 700 ${GPG_HOME_DIR}
     fi
+
+    print_separator
+
+    generate_master_key
 }
 
-read -p "Are you sure? Running init on a drive that was already initialized can cause unexpected results! (y/n)" -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    check_requirements
-fi
+function generate_master_key {
+
+    set_gpg_home
+
+    ${GPG_BIN} --full-gen-key
+    touch ${GPG_HOME_DIR}/gpg.conf
+    touch ${GPG_HOME_DIR}/gpg-agent.conf
+
+    chmod -R 700 ${GPG_HOME_DIR}/*
+}
+
+
+echo "Are you sure you want to initialize this drive?"
+echo "Running init on a drive that was already initialized can cause a lockout of your encrypted files! (y/n)"
+echo    # Move to a new line
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) check_requirements; break;;
+        No ) exit;;
+    esac
+done

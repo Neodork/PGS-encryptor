@@ -12,20 +12,34 @@ if [ -z $HOURS ]; then
 fi
 
 function check_dependencies {
-
-    [ -z "${SSH_KEYS}" ] && echo "No ssh keys found, exiting." && exit 1
     [ -z "${SSH_AGENT_BIN}" ] && echo "No ssh-agent command found, exiting." && exit 1
     [ -z "${SSH_ADD_BIN}" ] && echo "No ssh-add command found, exiting." && exit 1
 }
 
+function load_keys {
+    SSH_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
+
+    # No private keys found in directory
+    if [ -z "${SSH_KEYS}" ]; then
+        encrypt_private_keys
+        print_separator
+        echo "ERROR! No ssh keys found, exiting." && exit 1
+    fi
+
+    for key in SSH_KEYS
+    do
+	    echo "Processing $key"
+    done
+}
+
 if is_encrypted; then
-echo "hi"
     check_dependencies
+    set_gpg_home
     decrypt_private_keys
     flush_passphrase_cache
     untar
+    load_keys
+    encrypt_private_keys
 else
     echo "ERROR! Cannot load unencrypted keys! Run: \"sh encrypt\" first";
 fi
-
-
