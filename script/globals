@@ -20,9 +20,6 @@ SSH_KEY_DIR="ssh"
 SSH_FULL_KEY_DIR="sshfull"
 GPG_HOME_DIR="$DIR/masterkey"
 GPG_AGENT_CONFIG_FILE="$DIR/masterkey/gpg-agent.conf"
-if [ -d "$SSH_KEY_DIR" ]; then
-    SSH_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
-fi
 
 # Tar names
 SSH_KEY_TAR=${SSH_KEY_DIR}.tar.gz
