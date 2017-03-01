@@ -4,12 +4,12 @@ A small personal collection of shell scripts used for encrypting/decrypting and 
 ## Usage
 I have only tested this with a USB / SD card never with high volume devices. When referring to 'Your drive', 'A drive', 'The drive' I am referring to a USB / SD card or [a SD card in a reader](https://www.kingston.com/us/flash/readers/fcr-mrg2).
 
-- Make sure your USB / SD card is using the UDF format (See formatting!)
-- Clone this repository to your USB / SD card.
-- Go to or open a command line in your USB / SD card root directory.
-- Run `sh init` to generate the correct folders, permissions and a masterkey
+- Make sure your drive is using the UDF format (See formatting!)
+- Clone this repository to the root directory of your drive.
+- Go to or open a command line in your drives root directory.
+- Run `sh init` to generate the correct folders, permissions and a gpg masterkey
 - Fill the `ssh` folder with private keys (and optionally `full-ssh` with private, public and root_ca keys)
-- Run `sh encrypt`
+- Run `sh encrypt` to encrypt the ssh and sshfull directory
 - (WIP - THIS DOESNT WORK YET!) Run `sh load` or `shell load 2` to load your keys for N amount of hours.
 - decrypt everything using `sh decrypt` this will of course ask for your passphrase.
 - (WIP - THIS DOESNT EXIST YET!) Run `sh copy <yourvolume>` to copy your PGS setup to another drive.
