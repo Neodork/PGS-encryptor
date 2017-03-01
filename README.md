@@ -1,5 +1,5 @@
 # Portable GPG SSH key encryptor
-A small personal collection of shell scripts used for encrypting/decrypting and loading SSH keys into a workstation. Created with [sources](https://gist.github.com/stupakov/11227904) [all](https://github.com/DamnedFacts/ssh-fob) [over](http://tammersaleh.com/posts/building-an-encrypted-usb-drive-for-your-ssh-keys-in-os-x/) the internet.
+A small personal collection of shell scripts used for encrypting/decrypting and loading SSH keys into a workstation. Created with [sources](https://gist.github.com/stupakov/11227904) [all](https://github.com/DamnedFacts/ssh-fob) [over](http://tammersaleh.com/posts/building-an-encrypted-usb-drive-for-your-ssh-keys-in-os-x/) the internet. If you’re looking for a more out-of-the-box solution I would recommend something like [Yubikey](https://www.yubikeyshop.nl).
 
 ## Usage
 I have only tested this with a USB / SD card never with high volume devices. When referring to 'Your drive', 'A drive', 'The drive' I am referring to a USB / SD card or [a SD card in a reader](https://www.kingston.com/us/flash/readers/fcr-mrg2).
