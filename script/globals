@@ -8,6 +8,7 @@ GPG_BIN=`which gpg`
 SSH_AGENT_BIN=`which ssh-agent`
 SSH_ADD_BIN=`which ssh-add`
 TAR_BIN=`which tar`
+TOUCH_BIN=`which touch`
 
 # If we couldn't find GPG then try GPG2
 if [ -z "${GPG_BIN}" ]; then
