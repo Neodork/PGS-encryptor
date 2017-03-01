@@ -59,6 +59,7 @@ function encrypt_all_keys {
 }
 
 function decrypt_private_keys {
+    if [ -f ${ENCRYPTED_KEYS_FILE} ]; then
     ${GPG_BIN} --decrypt --output ${SSH_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_KEYS_FILE} && {
       echo "gpg: Decryption of ${ENCRYPTED_KEYS_FILE} complete! Removing encrypted resources.."
       rm ${ENCRYPTED_KEYS_FILE}
@@ -68,9 +69,13 @@ function decrypt_private_keys {
       print_separator
       exit 1;
     }
+    else
+        echo "Skipping ${ENCRYPTED_KEYS_FILE}, file not found..."
+    fi
 }
 
 function decrypt_all_keys {
+    if [ -f ${ENCRYPTED_FULL_KEYS_FILE} ]; then
     ${GPG_BIN} --decrypt --output ${SSH_FULL_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_FULL_KEYS_FILE} && {
       echo "gpg: Decryption of ${ENCRYPTED_FULL_KEYS_FILE} complete! Removing encrypted resources.."
       print_separator
@@ -79,7 +84,11 @@ function decrypt_all_keys {
       echo "ERROR! $SSH_FULL_KEY_TAR failed to decrypt"
       print_separator
       exit 1;
-    }
+     }
+    else
+        echo "Skipping ${ENCRYPTED_FULL_KEYS_FILE}, file not found..."
+        print_separator
+    fi
 }
 
 function set_gpg_home {
