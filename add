@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+. "$DIR/script/functions"
+
+FILE=$1
+
+function check_dependencies {
+    [ -z "${SSH_AGENT_BIN}" ] && echo "No ssh-agent bin found, exiting." && exit 1
+    [ -z "${SSH_ADD_BIN}" ] && echo "No ssh-add bin found, exiting." && exit 1
+}
+
+
+function load_private_key {
+    # Decrypt keys
+    decrypt_private_keys
+    flush_passphrase_cache
+    untar
+
+    mv $FILE ${SSH_KEY_DIR}/
+
+    # Encrypt keys
+    encrypt_private_keys
+}
+
+function load_full_key {
+    echo "full!";
+    # Decrypt keys
+    decrypt_private_keys
+    decrypt_all_keys
+    flush_passphrase_cache
+    untar
+
+    # Get private keys and copy sources.
+    PRIVATE_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${FILE}`
+    for key in $PRIVATE_KEYS
+    do
+	    cp $key ${SSH_KEY_DIR}/
+    done
+    mv $FILE ${SSH_FULL_KEY_DIR}/
+
+    # Encrypt keys
+    encrypt_private_keys
+    encrypt_all_keys
+}
+
+
+if is_encrypted; then
+    check_dependencies
+    set_gpg_home
+    if [ ! -d "$FILE" ]; then
+        load_private_key
+    else
+        load_full_key
+    fi
+else
+    echo "ERROR! 'sh add' only works when the drive is encrypted!";
+fi
