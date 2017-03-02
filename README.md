@@ -10,8 +10,9 @@ I have only tested this with a USB / SD card never with high volume devices. Whe
 - Clone this repository to the root directory of your drive.
 - (Optional) Remove the README.md file from your drive.
 - Go to or open a command line in your drives root directory.
-- Run `sh init` to generate the correct folders, permissions and a gpg masterkey (See generating the masterkey!). 
+- Run `sh init` to generate the correct directories, permissions and a gpg masterkey (See generating the masterkey!). 
 - (Optional) Remove the init script from your drive.
+- Open the `globals` file in the scripts directory and set your masterkey identifier under `KEY_OWNER_NAME`.
 - Run `sh encrypt` to encrypt the ssh and sshfull directory.
 - Add keys to your encrypted files with `sh add yourkey.key` or a whole directory using `sh add dirname`.
 - Load a key by its name with `sh load keyname` or load all your keys with `sh load --all`. You can define the amount of time in hours with the second argument `sh load id_rsa 2` the following will load id_rsa into the ssh-agent for 2 hours.
@@ -26,21 +27,21 @@ Note: Protect your private keys with a passphrase otherwise they're susceptible 
 
 ## Commands
 ### `sh init`
-Initialize your drive with the correct folders/permission. Create folders `ssh`, `sshfull` and `masterkey` and chowns the directories recursively to 700.
+Initializes your drive with the correct directories/permission. Create directories `ssh`, `sshfull` and `masterkey` and chowns the directories recursively to 700.
 
 **WARNING:** Can cause unexpected results when run on a drive that is already initialized.
 
 ### `sh encrypt`
-Encrypt the `ssh` and `sshfull` folder. Encrypts the ssh folder by making a tar.gz of it and encrypting the tar.
+Encrypt the `ssh` and `sshfull` directories. Encrypts the ssh directory by making a tar.gz of it and encrypting the tar.
 
 ### `sh decrypt`
-Decrypt the `ssh` and `sshfull` folder. Decrypts the folder and then untars it.
+Decrypt the `ssh` and `sshfull` directories. Decrypts the directories and then untars it.
 
 ### `sh add <dirname/filename>`
-Adds private key files to the encrypted ssh folder. This will prompt you for your masterkey passphrase
+Adds private key files to the encrypted `ssh` directory. This will prompt you for your masterkey passphrase.
 
-**Folders:** If you set a folder, this command will decrypt and untar the `ssh` and `sshfull` directories and copy the folder to `sshfull`. Any private keys found in the folder will be copied to `ssh` so they can be used with the `sh load` command.
-**Files:** If you set a file this command will decrypt and untar the `ssh` directory. And add the file to the ssh folder, there is no check in this case wether or not the file is a private key, so make sure it is.
+**Directories:** If you set a directory, this command will decrypt and untar the `ssh` and `sshfull` directories and move the directory to `sshfull`. Any private keys found in the directory will be copied to `ssh` so they can be used with the `sh load` command.
+**Files:** If you set a file this command will decrypt and untar the `ssh` directory. And add the file to the `ssh` directory, there is no check in this case wether or not the file is a private key, so make sure it is.
 
 ### `sh load <keyname> <hours>`
 Removes all previous loaded keys and adds the specified key to the ssh-agent for N hours. By default the command will add your key for 1 hour, the hours argument is not required. This command decrypts and untars the `ssh` directory and will load a key matching your keyname. 
@@ -73,7 +74,7 @@ The masterkey is used to encrypt all your private keys as a **second layer** of 
 
 The masterkey encryption protects your drive in case of loss. For example when you lose your key and some third party finds it. This third party now has encrypted private keys which are useless unless the passphrase for the masterkey is bruteforced. If the passphrase is bruteforced the third party needs to proceed to bruteforce the passphrase for your keys which should give you enough time to revoke access and create a new keys.
 
-If you choose to have no passphrase you might as well put all your keys in an unprotected folder on your drive.
+If you choose to have no passphrase you might as well put all your keys in an unprotected directory on your drive.
 
 So choose adequate protection for your masterkey.
 
