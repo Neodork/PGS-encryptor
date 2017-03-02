@@ -5,31 +5,50 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/script/globals"
 . "$DIR/script/functions"
 
-HOURS=$1
+KEY_NAME=$1
+HOURS=$2
+
+if [ -z $KEY_NAME ]; then
+   echo "ERROR! load requires a key name!"
+fi
 
 if [ -z $HOURS ]; then
   HOURS=1
 fi
 
 function check_dependencies {
-    [ -z "${SSH_AGENT_BIN}" ] && echo "No ssh-agent command found, exiting." && exit 1
-    [ -z "${SSH_ADD_BIN}" ] && echo "No ssh-add command found, exiting." && exit 1
+    [ -z "${SSH_AGENT_BIN}" ] && echo "No ssh-agent bin found, exiting." && exit 1
+    [ -z "${SSH_ADD_BIN}" ] && echo "No ssh-add bin found, exiting." && exit 1
+}
+
+function load_key {
+    ${SSH_ADD_BIN} -D
+    ${SSH_ADD_BIN} -t ${HOURS}H $DIR/$1
 }
 
 function load_keys {
     SSH_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
 
     # No private keys found in directory
-    if [ -z "${SSH_KEYS}" ]; then
+    if [ -z ${SSH_KEYS} ]; then
         encrypt_private_keys
         print_separator
         echo "ERROR! No ssh keys found, exiting." && exit 1
     fi
 
-    for key in SSH_KEYS
+    for key in $SSH_KEYS
     do
-	    echo "Processing $key"
+	    load_key $key
     done
+}
+
+function load {
+    if [ $KEY_NAME = "--all" ]; then
+        load_keys
+    else
+        load_key $SSH_KEY_DIR/$KEY_NAME
+    fi
+    print_separator
 }
 
 if is_encrypted; then
@@ -38,7 +57,7 @@ if is_encrypted; then
     decrypt_private_keys
     flush_passphrase_cache
     untar
-    load_keys
+    load
     encrypt_private_keys
 else
     echo "ERROR! Cannot load unencrypted keys! Run: \"sh encrypt\" first";

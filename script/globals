@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Credentials
-KEY_OWNER_NAME="Neodork.dev@gmail.com" # Change this to your GPG key owner name or email
+KEY_OWNER_NAME="<Your masterkey identifier here>" # Change this to your GPG key owner name or email
 
 # Binaries
 GPG_BIN=`which gpg`

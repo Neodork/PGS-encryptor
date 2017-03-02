@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+. "$DIR/script/functions"
+
+
+clear_gpg_agent_files
+${SSH_ADD_BIN} -D

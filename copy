@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+. "$DIR/script/functions"
+
+FILE=$1
+
+function copy_drive {
+
+    if [ ! -d "$FILE" ]; then
+        echo "The selected location must be a directory!" && exit 1;
+    fi
+
+    if ! is_encrypted; then
+        echo "ERROR! 'sh add' only works when the drive is encrypted!" && exit 1;
+    fi
+
+    clear_gpg_agent_files;
+
+    echo "Clearing ${FILE} ..." && rm -rf ${FILE}/*;
+
+    echo "Copying ${DIR} to ${FILE} ..." && cp -rp ${DIR}/* ${FILE}/
+}
+
+echo "WARNING! Backup your files in $FILE"
+echo "Are you sure you want to copy your drive to $FILE? This will clear the $FILE directory of any files!"
+echo    # Move to a new line
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) copy_drive; break;;
+        No ) exit;;
+    esac
+done
