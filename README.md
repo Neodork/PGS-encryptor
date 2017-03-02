@@ -12,7 +12,7 @@ I have only tested this with a USB / SD card never with high volume devices. Whe
 - Go to or open a command line in your drives root directory.
 - Run `sh init` to generate the correct directories, permissions and a gpg masterkey (See generating the masterkey!). 
 - (Optional) Remove the init script from your drive.
-- Open the `globals` file in the scripts directory and set your masterkey identifier under `KEY_OWNER_NAME`.
+- Open the `globals` file in the `script` directory and set your masterkey identifier under `KEY_OWNER_NAME`.
 - Run `sh encrypt` to encrypt the ssh and sshfull directory.
 - Add keys to your encrypted files with `sh add yourkey.key` or a whole directory using `sh add dirname`.
 - Load a key by its name with `sh load keyname` or load all your keys with `sh load --all`. You can define the amount of time in hours with the second argument `sh load id_rsa 2` the following will load id_rsa into the ssh-agent for 2 hours.
@@ -73,7 +73,7 @@ P.S: Replace all `{x}` and `{x}s{x}` with your drive number obtained by `diskuti
 ## Generating the masterkey
 The masterkey is used to encrypt all your private keys as a **second layer** of defence. Your private keys should always have a passphrase, even when loaded from an encrypted drive, into a trusted workstation.
 
-The masterkey encryption protects your drive in case of loss. For example when you lose your key and some third party finds it. This third party now has encrypted private keys which are useless unless the passphrase for the masterkey is bruteforced. If the passphrase is bruteforced the third party needs to proceed to bruteforce the passphrase for your keys which should give you enough time to revoke access and create a new keys.
+The masterkey encryption protects your drive in case of loss. For example when you lose your key and some third party finds it. This third party now has encrypted private keys which are useless unless the passphrase for the masterkey is bruteforced. If the passphrase is bruteforced the third party needs to proceed to bruteforce the passphrase for your keys which should give you enough time to revoke access and create new keys.
 
 If you choose to have no passphrase you might as well put all your keys in an unprotected directory on your drive.
 
