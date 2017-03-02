@@ -41,6 +41,7 @@ Decrypt the `ssh` and `sshfull` directories. Decrypts the directories and then u
 Adds private key files to the encrypted `ssh` directory. This will prompt you for your masterkey passphrase.
 
 **Directories:** If you set a directory, this command will decrypt and untar the `ssh` and `sshfull` directories and move the directory to `sshfull`. Any private keys found in the directory will be copied to `ssh` so they can be used with the `sh load` command.
+
 **Files:** If you set a file this command will decrypt and untar the `ssh` directory. And add the file to the `ssh` directory, there is no check in this case wether or not the file is a private key, so make sure it is.
 
 ### `sh load <keyname> <hours>`
