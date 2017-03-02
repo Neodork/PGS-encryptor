@@ -33,9 +33,7 @@ function encrypt_private_keys {
       rm -r ${SSH_KEY_DIR}
       rm ${SSH_KEY_TAR}
       } || {
-      remove_tars
-      echo "ERROR! $SSH_KEY_TAR failed to encrypt"
-      exit 1;
+      remove_tars && echo "ERROR! $SSH_KEY_TAR failed to encrypt" && exit 1;
     }
 }
 
@@ -49,12 +47,9 @@ function encrypt_all_keys {
 
     ${GPG_BIN} --encrypt --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${SSH_FULL_KEY_TAR} && {
       echo "GPG: Encryption of $SSH_FULL_KEY_TAR complete! Removing unencrypted resources.."
-      rm -r ${SSH_FULL_KEY_DIR}
-      rm ${SSH_FULL_KEY_TAR}
+      rm -r ${SSH_FULL_KEY_DIR} && rm ${SSH_FULL_KEY_TAR}
       } || {
-      remove_tars
-      echo "ERROR! $SSH_FULL_KEY_TAR failed to encrypt"
-      exit 1;
+      remove_tars && echo "ERROR! $SSH_FULL_KEY_TAR failed to encrypt" && exit 1;
     }
 }
 
@@ -62,12 +57,9 @@ function decrypt_private_keys {
     if [ -f ${ENCRYPTED_KEYS_FILE} ]; then
     ${GPG_BIN} --decrypt --output ${SSH_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_KEYS_FILE} && {
       echo "gpg: Decryption of ${ENCRYPTED_KEYS_FILE} complete! Removing encrypted resources.."
-      rm ${ENCRYPTED_KEYS_FILE}
-      print_separator
+      rm ${ENCRYPTED_KEYS_FILE} && print_separator
       } || {
-      echo "ERROR! $SSH_KEY_TAR failed to decrypt"
-      print_separator
-      exit 1;
+      echo "ERROR! $SSH_KEY_TAR failed to decrypt" && print_separator && exit 1;
     }
     else
         echo "Skipping ${ENCRYPTED_KEYS_FILE}, file not found..."
@@ -81,13 +73,34 @@ function decrypt_all_keys {
       print_separator
       rm ${ENCRYPTED_FULL_KEYS_FILE}
       } || {
-      echo "ERROR! $SSH_FULL_KEY_TAR failed to decrypt"
-      print_separator
-      exit 1;
+      echo "ERROR! $SSH_FULL_KEY_TAR failed to decrypt" && print_separator && exit 1;
      }
     else
-        echo "Skipping ${ENCRYPTED_FULL_KEYS_FILE}, file not found..."
-        print_separator
+        echo "Skipping ${ENCRYPTED_FULL_KEYS_FILE}, file not found..." && print_separator
+    fi
+}
+
+function clear_gpg_agent_files {
+    echo "Clearing gpg-agent symlink files..."
+
+    if [ -e "${GPG_HOME_DIR}/S.gpg-agent" ]; then
+        echo "clear agent files!"
+        unlink "rm ${GPG_HOME_DIR}/S.gpg-agent"
+    fi
+
+    if [ -e "${GPG_HOME_DIR}/S.gpg-agent.browser" ]; then
+        echo "BROWSER!"
+        unlink ${GPG_HOME_DIR}/S.gpg-agent.browser
+    fi
+
+    if [ -e "${GPG_HOME_DIR}/S.gpg-agent.extra" ]; then
+        echo "exrta!"
+        unlink ${GPG_HOME_DIR}/S.gpg-agent.extra
+    fi
+
+    if [ -e "${GPG_HOME_DIR}/S.gpg-agent.ssh" ]; then
+        echo "ssh!"
+        unlink ${GPG_HOME_DIR}/S.gpg-agent.ssh
     fi
 }
 
