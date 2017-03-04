@@ -29,7 +29,7 @@ function encrypt_private_keys {
     export GNUPGHOME=${GPG_HOME_DIR}
 
     ${GPG_BIN} --encrypt --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${SSH_KEY_TAR} && {
-      echo "GPG: Encryption of $SSH_KEY_TAR complete! Removing unencrypted resources.."
+      echo "gpg: Encryption of $SSH_KEY_TAR complete! Removing unencrypted resources.."
       rm -r ${SSH_KEY_DIR}
       rm ${SSH_KEY_TAR}
       } || {
