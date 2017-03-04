@@ -28,3 +28,6 @@ SSH_FULL_KEY_TAR=${SSH_FULL_KEY_DIR}.tar.gz
 # Encrypted files
 ENCRYPTED_KEYS_FILE=${SSH_KEY_TAR}.gpg
 ENCRYPTED_FULL_KEYS_FILE=${SSH_FULL_KEY_TAR}.gpg
+
+# GPG version
+GPG_VERSION=`gpg --version | grep -Po "([0-9]{1,}\.)+[0-9]{1,}"`

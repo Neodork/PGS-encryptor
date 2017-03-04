@@ -40,8 +40,16 @@ function check_requirements {
 function generate_master_key {
 
     set_gpg_home
+	
+	#[[ $(${GPG_AGENT}) == *"no agent running"* ]] && echo "NOT RUNNING BRO!"
 
-    ${GPG_BIN} --full-gen-key
+    # Check for version and call generate command.
+	if (( $GPG_VERION >= 2.1 )); then
+        ${GPG_BIN} --full-gen-key
+    else
+        ${GPG_BIN} --gen-key
+    fi
+
     touch ${GPG_HOME_DIR}/gpg.conf
     touch ${GPG_HOME_DIR}/gpg-agent.conf
 

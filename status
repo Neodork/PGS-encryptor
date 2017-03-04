@@ -11,14 +11,13 @@ if  is_encrypted; then
 ENCRYPTED='ENCRYPTED'
 fi
 
-
 echo "-------------------- Details --------------------"
 echo "STATUS:              ${ENCRYPTED}"
 echo "SSH key dir:         $DIR/${SSH_KEY_DIR}"
 echo "Full SSH key dir:    $DIR/${SSH_FULL_KEY_DIR}"
 echo "GPG home dir:        ${GPG_HOME_DIR}"
 echo "GPG agent config:    ${GPG_AGENT_CONFIG_FILE}"
-echo "GPG binary:          ${GPG_BIN}"
+echo "GPG binary:          ${GPG_BIN} ($GPG_VERSION)"
 echo "SSH agent binary:    ${SSH_AGENT_BIN}"
 echo "SSH add binary:      ${SSH_ADD_BIN}"
 echo "Tar binary:          ${TAR_BIN}"
