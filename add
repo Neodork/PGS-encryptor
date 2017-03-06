@@ -19,7 +19,7 @@ function load_private_key {
     flush_passphrase_cache
     untar
 
-    mv $FILE ${SSH_KEY_DIR}/
+    ${MV_BIN} $FILE ${SSH_KEY_DIR}/
 
     # Encrypt keys
     encrypt_private_keys
@@ -39,7 +39,7 @@ function load_full_key {
     do
 	    cp $key ${SSH_KEY_DIR}/
     done
-    mv $FILE ${SSH_FULL_KEY_DIR}/
+    ${MV_BIN} $FILE ${SSH_FULL_KEY_DIR}/
 
     # Encrypt keys
     encrypt_private_keys
