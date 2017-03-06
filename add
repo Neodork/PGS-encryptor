@@ -37,7 +37,7 @@ function load_full_key {
     PRIVATE_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${FILE}`
     for key in $PRIVATE_KEYS
     do
-	    cp $key ${SSH_KEY_DIR}/
+	    ${CP_BIN} $key ${SSH_KEY_DIR}/
     done
     ${MV_BIN} $FILE ${SSH_FULL_KEY_DIR}/
 

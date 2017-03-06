@@ -21,7 +21,7 @@ function copy_drive {
 
     echo "Clearing ${FILE} ..." && ${RM_BIN} -rf ${FILE}/*;
 
-    echo "Copying ${DIR} to ${FILE} ..." && cp -rp ${DIR}/* ${FILE}/
+    echo "Copying ${DIR} to ${FILE} ..." && ${CP_BIN} -rp ${DIR}/* ${FILE}/
 }
 
 echo "WARNING! Backup your files in $FILE"
