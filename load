@@ -24,7 +24,7 @@ function check_dependencies {
 
 function load_key {
 
-    if [ $CLEAR = "--clear" ]; then
+    if [ "$CLEAR" = "--clear" ]; then
         ${SSH_ADD_BIN} -D
     fi
     ${SSH_ADD_BIN} -t ${HOURS}H $DIR/$1
@@ -47,7 +47,7 @@ function load_keys {
 }
 
 function load {
-    if [ $KEY_NAME = "--all" ]; then
+    if [ "$KEY_NAME" = "--all" ]; then
         load_keys
     else
         load_key $SSH_KEY_DIR/$KEY_NAME
