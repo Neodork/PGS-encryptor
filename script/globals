@@ -15,6 +15,7 @@ UNLINK_BIN=`which unlink`
 RM_BIN=`which rm`
 MKDIR_BIN=`which mkdir`
 CHMOD_BIN=`which chmod`
+HEAD_BIN=`which head`
 
 # If we couldn't find GPG then try GPG2
 if [ -z "${GPG_BIN}" ]; then
@@ -36,4 +37,4 @@ ENCRYPTED_KEYS_FILE=${SSH_KEY_TAR}.gpg
 ENCRYPTED_FULL_KEYS_FILE=${SSH_FULL_KEY_TAR}.gpg
 
 # GPG version
-GPG_VERSION=`${GPG_BIN} --version | grep -Eo -m 1 "([0-9]{1,}\.)+[0-9]{1,}"`
+GPG_VERSION=`${GPG_BIN} --version | grep -Eo -m 1 "[0-9]" | ${HEAD_BIN} -1`

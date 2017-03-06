@@ -44,7 +44,8 @@ function generate_master_key {
 	#[[ $(${GPG_AGENT}) == *"no agent running"* ]] && echo "NOT RUNNING BRO!"
 
     # Check for version and call generate command.
-	if (( $GPG_VERION >= 2.1 )); then
+    echo $GPG_VERSION
+	if [ $GPG_VERSION -ge 2 ]; then
         ${GPG_BIN} --full-gen-key
     else
         ${GPG_BIN} --gen-key
