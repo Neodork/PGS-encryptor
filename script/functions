@@ -117,10 +117,10 @@ function flush_passphrase_cache {
 
 function untar {
     # Untar files
-    for file in *.tar.gz; do tar xzvf "${file}" && echo "\nTar: Completed unpacking archive, removing ${file}" && print_separator && rm "${file}"; done
+    for file in *.tar.gz; do ${TAR_BIN} xzvf "${file}" && echo "\nTar: Completed unpacking archive, removing ${file}" && print_separator && rm "${file}"; done
 }
 
 function remove_tars {
-    # Untar files
+    # Remove tar files
     for file in *.tar.gz; do rm "${file}"; done
 }
