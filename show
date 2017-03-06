@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/script/globals"
+. "$DIR/script/functions"
+
+KEY_NAME=$1
+
+if [ -z $KEY_NAME ]; then
+   echo "ERROR! show requires a key name!"
+fi
+
+function print_public_key {
+    echo "Printing public key ${KEY_NAME}.pub..."
+    print_separator
+    echo ""; # empty line for convenience
+    ${CAT_BIN} `find ${SSH_FULL_KEY_DIR} -name ${KEY_NAME}.pub`
+    echo ""; # empty line for convenience
+    print_separator
+}
+
+if is_encrypted; then
+    set_gpg_home
+    decrypt_all_keys
+    flush_passphrase_cache
+    untar
+    print_public_key
+    encrypt_all_keys
+else
+    echo "ERROR! Cannot show unencrypted keys! Run: \"sh encrypt\" first";
+fi
