@@ -11,6 +11,7 @@ TAR_BIN=`which tar`
 TOUCH_BIN=`which touch`
 MV_BIN=`which mv`
 CP_BIN=`which cp`
+UNLINK_BIN=`which unlink`
 
 # If we couldn't find GPG then try GPG2
 if [ -z "${GPG_BIN}" ]; then

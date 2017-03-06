@@ -85,22 +85,22 @@ function clear_gpg_agent_files {
 
     if [ -e "${GPG_HOME_DIR}/S.gpg-agent" ]; then
         echo "clear agent files!"
-        unlink "rm ${GPG_HOME_DIR}/S.gpg-agent"
+        ${UNLINK_BIN} ${GPG_HOME_DIR}/S.gpg-agent
     fi
 
     if [ -e "${GPG_HOME_DIR}/S.gpg-agent.browser" ]; then
         echo "BROWSER!"
-        unlink ${GPG_HOME_DIR}/S.gpg-agent.browser
+        ${UNLINK_BIN} ${GPG_HOME_DIR}/S.gpg-agent.browser
     fi
 
     if [ -e "${GPG_HOME_DIR}/S.gpg-agent.extra" ]; then
         echo "exrta!"
-        unlink ${GPG_HOME_DIR}/S.gpg-agent.extra
+        ${UNLINK_BIN} ${GPG_HOME_DIR}/S.gpg-agent.extra
     fi
 
     if [ -e "${GPG_HOME_DIR}/S.gpg-agent.ssh" ]; then
         echo "ssh!"
-        unlink ${GPG_HOME_DIR}/S.gpg-agent.ssh
+        ${UNLINK_BIN} ${GPG_HOME_DIR}/S.gpg-agent.ssh
     fi
 }
 
