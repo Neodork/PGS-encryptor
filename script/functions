@@ -30,8 +30,8 @@ function encrypt_private_keys {
 
     ${GPG_BIN} --encrypt --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${SSH_KEY_TAR} && {
       echo "gpg: Encryption of $SSH_KEY_TAR complete! Removing unencrypted resources.."
-      rm -r ${SSH_KEY_DIR}
-      rm ${SSH_KEY_TAR}
+      ${RM_BIN} -r ${SSH_KEY_DIR}
+      ${RM_BIN} ${SSH_KEY_TAR}
       } || {
       remove_tars && echo "ERROR! $SSH_KEY_TAR failed to encrypt" && exit 1;
     }
@@ -47,7 +47,7 @@ function encrypt_all_keys {
 
     ${GPG_BIN} --encrypt --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${SSH_FULL_KEY_TAR} && {
       echo "GPG: Encryption of $SSH_FULL_KEY_TAR complete! Removing unencrypted resources.."
-      rm -r ${SSH_FULL_KEY_DIR} && rm ${SSH_FULL_KEY_TAR}
+      ${RM_BIN} -r ${SSH_FULL_KEY_DIR} && ${RM_BIN} ${SSH_FULL_KEY_TAR}
       } || {
       remove_tars && echo "ERROR! $SSH_FULL_KEY_TAR failed to encrypt" && exit 1;
     }
@@ -57,7 +57,7 @@ function decrypt_private_keys {
     if [ -f ${ENCRYPTED_KEYS_FILE} ]; then
     ${GPG_BIN} --decrypt --output ${SSH_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_KEYS_FILE} && {
       echo "gpg: Decryption of ${ENCRYPTED_KEYS_FILE} complete! Removing encrypted resources.."
-      rm ${ENCRYPTED_KEYS_FILE} && print_separator
+      ${RM_BIN} ${ENCRYPTED_KEYS_FILE} && print_separator
       } || {
       echo "ERROR! $SSH_KEY_TAR failed to decrypt" && print_separator && exit 1;
     }
@@ -71,7 +71,7 @@ function decrypt_all_keys {
     ${GPG_BIN} --decrypt --output ${SSH_FULL_KEY_TAR} --options ${GPG_AGENT_CONFIG_FILE} -r ${KEY_OWNER_NAME} ${ENCRYPTED_FULL_KEYS_FILE} && {
       echo "gpg: Decryption of ${ENCRYPTED_FULL_KEYS_FILE} complete! Removing encrypted resources.."
       print_separator
-      rm ${ENCRYPTED_FULL_KEYS_FILE}
+      ${RM_BIN} ${ENCRYPTED_FULL_KEYS_FILE}
       } || {
       echo "ERROR! $SSH_FULL_KEY_TAR failed to decrypt" && print_separator && exit 1;
      }
@@ -117,10 +117,10 @@ function flush_passphrase_cache {
 
 function untar {
     # Untar files
-    for file in *.tar.gz; do ${TAR_BIN} xzvf "${file}" && echo "\nTar: Completed unpacking archive, removing ${file}" && print_separator && rm "${file}"; done
+    for file in *.tar.gz; do ${TAR_BIN} xzvf "${file}" && echo "\nTar: Completed unpacking archive, removing ${file}" && print_separator && ${RM_BIN} "${file}"; done
 }
 
 function remove_tars {
     # Remove tar files
-    for file in *.tar.gz; do rm "${file}"; done
+    for file in *.tar.gz; do ${RM_BIN} "${file}"; done
 }
