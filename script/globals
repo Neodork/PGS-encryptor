@@ -14,6 +14,7 @@ CP_BIN=`which cp`
 UNLINK_BIN=`which unlink`
 RM_BIN=`which rm`
 MKDIR_BIN=`which mkdir`
+CHMOD_BIN=`which chmod`
 
 # If we couldn't find GPG then try GPG2
 if [ -z "${GPG_BIN}" ]; then

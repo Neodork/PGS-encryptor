@@ -17,19 +17,19 @@ function check_requirements {
     if [ ! -d "$SSH_KEY_DIR" ]; then
         echo "Could not find: $SSH_KEY_DIR directory, creating..."
         ${MKDIR_BIN} ${SSH_KEY_DIR}
-        chmod -R 700 ${SSH_KEY_DIR}
+        ${CHMOD_BIN} -R 700 ${SSH_KEY_DIR}
     fi
 
     if [ ! -d "$SSH_FULL_KEY_DIR" ]; then
         echo "Could not find: $SSH_FULL_KEY_DIR directory, creating..."
         ${MKDIR_BIN} ${SSH_FULL_KEY_DIR}
-        chmod -R 700 ${SSH_FULL_KEY_DIR}
+        ${CHMOD_BIN} -R 700 ${SSH_FULL_KEY_DIR}
     fi
 
     if [ ! -d "$GPG_HOME_DIR" ]; then
         echo "Could not find: $GPG_HOME_DIR directory, creating..."
         ${MKDIR_BIN} ${GPG_HOME_DIR}
-        chmod -R 700 ${GPG_HOME_DIR}
+        ${CHMOD_BIN} -R 700 ${GPG_HOME_DIR}
     fi
 
     print_separator
@@ -53,7 +53,7 @@ function generate_master_key {
     ${TOUCH_BIN} ${GPG_HOME_DIR}/gpg.conf
     ${TOUCH_BIN} ${GPG_HOME_DIR}/gpg-agent.conf
 
-    chmod -R 700 ${GPG_HOME_DIR}/*
+    ${CHMOD_BIN} -R 700 ${GPG_HOME_DIR}/*
 }
 
 
