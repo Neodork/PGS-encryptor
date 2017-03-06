@@ -7,6 +7,7 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
 KEY_NAME=$1
 HOURS=$2
+CLEAR=$3
 
 if [ -z $KEY_NAME ]; then
    echo "ERROR! load requires a key name!"
@@ -22,7 +23,10 @@ function check_dependencies {
 }
 
 function load_key {
-    ${SSH_ADD_BIN} -D
+
+    if [ $CLEAR = "--clear" ]; then
+        ${SSH_ADD_BIN} -D
+    fi
     ${SSH_ADD_BIN} -t ${HOURS}H $DIR/$1
 }
 
