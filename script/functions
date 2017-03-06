@@ -40,7 +40,7 @@ function encrypt_private_keys {
 function encrypt_all_keys {
 
     # Tar directories
-    ${TAR_BIN}  czf ${SSH_FULL_KEY_TAR} ${SSH_FULL_KEY_DIR}
+    ${TAR_BIN} czf ${SSH_FULL_KEY_TAR} ${SSH_FULL_KEY_DIR}
 
     # Set GPG home to our USB GPG home
     export GNUPGHOME=${GPG_HOME_DIR}
