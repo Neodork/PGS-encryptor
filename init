@@ -50,8 +50,8 @@ function generate_master_key {
         ${GPG_BIN} --gen-key
     fi
 
-    touch ${GPG_HOME_DIR}/gpg.conf
-    touch ${GPG_HOME_DIR}/gpg-agent.conf
+    ${TOUCH_BIN} ${GPG_HOME_DIR}/gpg.conf
+    ${TOUCH_BIN} ${GPG_HOME_DIR}/gpg-agent.conf
 
     chmod -R 700 ${GPG_HOME_DIR}/*
 }
