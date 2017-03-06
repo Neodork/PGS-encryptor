@@ -27,7 +27,7 @@ function load_key {
 }
 
 function load_keys {
-    SSH_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
+    SSH_KEYS=`${GREP_BIN} -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
 
     # No private keys found in directory
     if [ -z ${SSH_KEYS} ]; then
