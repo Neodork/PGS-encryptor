@@ -28,6 +28,7 @@ if is_encrypted; then
     print_public_key
     encrypt_all_keys
     clear_gpg_agent_files
+    kill_agent
 else
     echo "ERROR! Cannot show unencrypted keys! Run: \"sh encrypt\" first";
 fi

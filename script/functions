@@ -115,6 +115,10 @@ function flush_passphrase_cache {
     print_separator
 }
 
+function kill_agent {
+    killall gpg-agent
+}
+
 function untar {
     # Untar files
     for file in *.tar.gz; do ${TAR_BIN} xzvf "${file}" && echo "\nTar: Completed unpacking archive, removing ${file}" && print_separator && ${RM_BIN} "${file}"; done
