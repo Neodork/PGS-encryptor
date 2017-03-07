@@ -16,20 +16,20 @@ function check_requirements {
 
     if [ ! -d "$SSH_KEY_DIR" ]; then
         echo "Could not find: $SSH_KEY_DIR directory, creating..."
-        mkdir ${SSH_KEY_DIR}
-        chmod -R 700 ${SSH_KEY_DIR}
+        ${MKDIR_BIN} ${SSH_KEY_DIR}
+        ${CHMOD_BIN} -R 700 ${SSH_KEY_DIR}
     fi
 
     if [ ! -d "$SSH_FULL_KEY_DIR" ]; then
         echo "Could not find: $SSH_FULL_KEY_DIR directory, creating..."
-        mkdir ${SSH_FULL_KEY_DIR}
-        chmod -R 700 ${SSH_FULL_KEY_DIR}
+        ${MKDIR_BIN} ${SSH_FULL_KEY_DIR}
+        ${CHMOD_BIN} -R 700 ${SSH_FULL_KEY_DIR}
     fi
 
     if [ ! -d "$GPG_HOME_DIR" ]; then
         echo "Could not find: $GPG_HOME_DIR directory, creating..."
-        mkdir ${GPG_HOME_DIR}
-        chmod -R 700 ${GPG_HOME_DIR}
+        ${MKDIR_BIN} ${GPG_HOME_DIR}
+        ${CHMOD_BIN} -R 700 ${GPG_HOME_DIR}
     fi
 
     print_separator
@@ -40,12 +40,21 @@ function check_requirements {
 function generate_master_key {
 
     set_gpg_home
+	
+	#[[ $(${GPG_AGENT}) == *"no agent running"* ]] && echo "NOT RUNNING BRO!"
 
-    ${GPG_BIN} --full-gen-key
+    # Check for version and call generate command.
+    echo $GPG_VERSION
+	if [ $GPG_VERSION -ge 2 ]; then
+        ${GPG_BIN} --full-gen-key
+    else
+        ${GPG_BIN} --gen-key
+    fi
+
     ${TOUCH_BIN} ${GPG_HOME_DIR}/gpg.conf
     ${TOUCH_BIN} ${GPG_HOME_DIR}/gpg-agent.conf
 
-    chmod -R 700 ${GPG_HOME_DIR}/*
+    ${CHMOD_BIN} -R 700 ${GPG_HOME_DIR}/*
 }
 
 

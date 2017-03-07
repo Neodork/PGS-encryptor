@@ -19,7 +19,7 @@ function load_private_key {
     flush_passphrase_cache
     untar
 
-    mv $FILE ${SSH_KEY_DIR}/
+    ${MV_BIN} $FILE ${SSH_KEY_DIR}/
 
     # Encrypt keys
     encrypt_private_keys
@@ -34,12 +34,12 @@ function load_full_key {
     untar
 
     # Get private keys and copy sources.
-    PRIVATE_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${FILE}`
+    PRIVATE_KEYS=`${GREP_BIN} -rl 'BEGIN .* PRIVATE KEY' ${FILE}`
     for key in $PRIVATE_KEYS
     do
-	    cp $key ${SSH_KEY_DIR}/
+	    ${CP_BIN} $key ${SSH_KEY_DIR}/
     done
-    mv $FILE ${SSH_FULL_KEY_DIR}/
+    ${MV_BIN} $FILE ${SSH_FULL_KEY_DIR}/
 
     # Encrypt keys
     encrypt_private_keys

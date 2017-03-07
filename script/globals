@@ -9,6 +9,16 @@ SSH_AGENT_BIN=`which ssh-agent`
 SSH_ADD_BIN=`which ssh-add`
 TAR_BIN=`which tar`
 TOUCH_BIN=`which touch`
+MV_BIN=`which mv`
+CP_BIN=`which cp`
+UNLINK_BIN=`which unlink`
+RM_BIN=`which rm`
+MKDIR_BIN=`which mkdir`
+CHMOD_BIN=`which chmod`
+HEAD_BIN=`which head`
+GREP_BIN=`which grep`
+CAT_BIN=`which cat`
+FIND_BIN=`which find`
 
 # If we couldn't find GPG then try GPG2
 if [ -z "${GPG_BIN}" ]; then
@@ -28,3 +38,6 @@ SSH_FULL_KEY_TAR=${SSH_FULL_KEY_DIR}.tar.gz
 # Encrypted files
 ENCRYPTED_KEYS_FILE=${SSH_KEY_TAR}.gpg
 ENCRYPTED_FULL_KEYS_FILE=${SSH_FULL_KEY_TAR}.gpg
+
+# GPG version
+GPG_VERSION=`${GPG_BIN} --version | ${GREP_BIN} -Eo -m 1 "[0-9]" | ${HEAD_BIN} -1`

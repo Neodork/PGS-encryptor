@@ -19,9 +19,9 @@ function copy_drive {
 
     clear_gpg_agent_files;
 
-    echo "Clearing ${FILE} ..." && rm -rf ${FILE}/*;
+    echo "Clearing ${FILE} ..." && ${RM_BIN} -rf ${FILE}/*;
 
-    echo "Copying ${DIR} to ${FILE} ..." && cp -rp ${DIR}/* ${FILE}/
+    echo "Copying ${DIR} to ${FILE} ..." && ${CP_BIN} -rp ${DIR}/* ${FILE}/
 }
 
 echo "WARNING! Backup your files in $FILE"

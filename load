@@ -7,6 +7,7 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
 KEY_NAME=$1
 HOURS=$2
+CLEAR=$3
 
 if [ -z $KEY_NAME ]; then
    echo "ERROR! load requires a key name!"
@@ -22,12 +23,15 @@ function check_dependencies {
 }
 
 function load_key {
-    ${SSH_ADD_BIN} -D
+
+    if [ "$CLEAR" = "--clear" ]; then
+        ${SSH_ADD_BIN} -D
+    fi
     ${SSH_ADD_BIN} -t ${HOURS}H $DIR/$1
 }
 
 function load_keys {
-    SSH_KEYS=`grep -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
+    SSH_KEYS=`${GREP_BIN} -rl 'BEGIN .* PRIVATE KEY' ${SSH_KEY_DIR}`
 
     # No private keys found in directory
     if [ -z ${SSH_KEYS} ]; then
@@ -43,7 +47,7 @@ function load_keys {
 }
 
 function load {
-    if [ $KEY_NAME = "--all" ]; then
+    if [ "$KEY_NAME" = "--all" ]; then
         load_keys
     else
         load_key $SSH_KEY_DIR/$KEY_NAME
