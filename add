@@ -55,6 +55,7 @@ if is_encrypted; then
     else
         load_full_key
     fi
+    clear_gpg_agent_files
 else
     echo "ERROR! 'sh add' only works when the drive is encrypted!";
 fi
