@@ -6,5 +6,8 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/script/functions"
 
 
+set_gpg_home
+flush_passphrase_cache
 clear_gpg_agent_files
+kill_agent
 ${SSH_ADD_BIN} -D

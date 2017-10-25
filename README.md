@@ -50,6 +50,9 @@ Removes all previous loaded keys and adds the specified key to the ssh-agent for
 E.G: `sh load id_rsa 2` will load the id_rsa key for 2 hours.
 E.G: `sh load common` will load the common key for 1 hour.
 
+### `sh show <keyname>`
+Prints the public key for they private/public key pair with the name `<keyname>`. Useful for adding the public key to services like Bitbucket, Github, etc...
+
 ### `sh endsession`
 Forcefully clear the gpg-agent files from your `masterkey` directory and clear loaded ssh keys from the ssh-agent.
 

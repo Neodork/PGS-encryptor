@@ -17,8 +17,6 @@ function copy_drive {
         echo "ERROR! 'sh add' only works when the drive is encrypted!" && exit 1;
     fi
 
-    clear_gpg_agent_files;
-
     echo "Clearing ${FILE} ..." && ${RM_BIN} -rf ${FILE}/*;
 
     echo "Copying ${DIR} to ${FILE} ..." && ${CP_BIN} -rp ${DIR}/* ${FILE}/

@@ -24,6 +24,8 @@ if is_encrypted; then
     decrypt_private_keys
     decrypt_all_keys
     flush_passphrase_cache
+    clear_gpg_agent_files
+    kill_agent
     untar
 else
     echo "Nothing to decrypt!";

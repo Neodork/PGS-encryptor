@@ -63,6 +63,8 @@ if is_encrypted; then
     untar
     load
     encrypt_private_keys
+    clear_gpg_agent_files
+    kill_agent
 else
     echo "ERROR! Cannot load unencrypted keys! Run: \"sh encrypt\" first";
 fi

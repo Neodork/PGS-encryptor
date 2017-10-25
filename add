@@ -23,6 +23,9 @@ function load_private_key {
 
     # Encrypt keys
     encrypt_private_keys
+
+    clear_gpg_agent_files
+    kill_agent
 }
 
 function load_full_key {
@@ -31,6 +34,8 @@ function load_full_key {
     decrypt_private_keys
     decrypt_all_keys
     flush_passphrase_cache
+    clear_gpg_agent_files
+    kill_agent
     untar
 
     # Get private keys and copy sources.
@@ -55,6 +60,7 @@ if is_encrypted; then
     else
         load_full_key
     fi
+    clear_gpg_agent_files
 else
     echo "ERROR! 'sh add' only works when the drive is encrypted!";
 fi
